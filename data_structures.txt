@@ -31,8 +31,49 @@ of \mathcal{N}. We number subsets by their column number. In the above,
 subset no. 1 is { 1 }, subset no. 2 is { 2 }, subset no. 3 is { 1, 2 }, while 
 subset no. 7 is { 1, 2, 3 }. We will use this ordering throughout.
 
+The function CompPart(n) computes all partitions of the set \mathcal{N} and stores
+the result in a cell array. For example, list=CompPart(3) produces an array list
+with
+
+list{1} =
+     1     0
+     1     0
+     0     1
+
+list{2} =
+     1     0     0
+     0     1     0
+     0     0     1
+
+list{3} =
+     1
+     1
+     1
+
+list{4} =
+     1     0
+     0     1
+     1     0
+
+list{5} =
+     1     0
+     0     1
+     0     1
+
+Note that CompPart(13) produces already a list with 27,644,437 entries, see
+https://oeis.org/A000110. MATLAB stores this in a cell array with 19,853,529,488 bytes.
+
+Note that CompPart does not sort the partitions into their natural partial order.
+Nevertheless, we will use the order induced by the output of CompPart throughout.
+For example, the partition described by
+
+     1     0
+     0     1
+     1     0
+
+will be denoted as the fourth partition, as it is stored as list{4}.
 
 % Author: Joerg Fliege
-% Date: 28/10/2024
+% Date: 30/10/2024
 % Version: 1.0
 % (c) Nucleolus Software Ltd

@@ -73,6 +73,17 @@ For example, the partition described by
 
 will be denoted as the fourth partition, as it is stored as list{4}.
 
+A game with free riders (externalities) is now defined by a payoff or value
+function v that provides a payoff value v(S; P) for each partition P of
+\mathcal{N} and each set S \in P. We store these values in a cell array
+payoff.  payoff{i} is a vector of payoff values related to partition no. I.
+Let P be partition no. i and let values=payoff{i}. The partition P is
+represented as a matrix, with each column representing one set of P. 
+For columns 1, \ldots, m of this matrix, let S_1, \ldots, m be the
+corresponding subsets. We then have values[j] = v(S_j, P).
+In particular, if P has m subsets, then values is a vector of length m.
+
+
 % Author: Joerg Fliege
 % Date: 30/10/2024
 % Version: 1.0

@@ -1,0 +1,30 @@
+We consider games with n players, n>=2. The number n usually does not need 
+to be passed as a parameter, as the length of certain vectors, or the number
+of rows or columns of certain matrices will be equal to n. Depending on the 
+context one can then retrieve n by a command of the form [n m] = size(A).
+
+For the set \mathcal{N} = \{ 1, \ldots, n \}, we encode any subset of
+\mathcal{N} by a 0/1 column vector of length n. If x is the vector representing
+the set S, then x(i)==1 if and only if i \in S.
+
+A collection of subsets of \mathcal{N} is simply a matrix with columns that 
+encode these subsets.
+
+A partition of \mathcal{N} is encoded by a matrix with n rows, where each
+column represents a subset of \mathcal{N}. Let P be such a matrix and let 
+m be the number of columns of P, i.e. m is the number of sets in the partition. 
+We can then check if P indeed represents a partition by checking if
+P*e_m = e_n, where e_m resp. e_n are vectors of length m resp. n, of all 1's.
+
+The function compA constructs all possible nonempty subsets of \mathcal{N}. 
+For example, comp(3) gives
+
+     1     0     1     0     1     0     1
+     0     1     1     0     0     1     1
+     0     0     0     1     1     1     1
+
+where each column represents one unique subset. Note that for A=comp(n),
+the matrix A has n rows and 2^n -1 columns.
+
+The output of compA(n) induces a natural numbering (or order) of all subsets 
+of \mathcal{N}. We number 

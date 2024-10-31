@@ -11,6 +11,9 @@ function zmax = compzmax(partitions,sets,payoffs)
 % sets: all sets to consider
 % payoffs: payoff values for all partitions that are considered
 
+% Known bugs: none, but the for-loops can be reordered for further
+% efficiency. Suggest to place the k-loop (players) innermost.
+
 % Author: Joerg Fliege
 % Date: 30/10/2024
 % Version: 1.0

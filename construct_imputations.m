@@ -11,7 +11,7 @@ function [A1 A2 b1 b2] = construct_imputations(P, valP)
 % (c) Nucleolus Software Ltd
 
 A1 = P';
-b1 = valP;
+b1 = valP';
 % hahahahahahahahaaaaaaaaaaa, genius move, right?
 
 % We are going to build up A2, b2 iteratively:

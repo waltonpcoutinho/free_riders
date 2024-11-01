@@ -19,7 +19,7 @@ function [bool, Q, valQ, y] = checkdom_T1(P, x, partitions, payoffs, zmax)
 % partitions in 'partitions'.
 
 % Author: Joerg Fliege
-% Date: 31/10/2024
+% Date: 01/11/2024
 % Version: 1.0
 % (c) Nucleolus Software Ltd
 
@@ -44,6 +44,10 @@ for i = 1:length(partitions)
             % Q=Q;
             y = yw(1:n);
             return; % exit subroutine
+            %
+            % Might be worthwhile to store (Q,y) in another cell array and
+            % run over all (Q, T) pairs, to find all dominating pairs.
+            %
         end % end if
     end % for j
 end % for i

@@ -27,4 +27,73 @@ where each column represents one unique subset. Note that for A=comp(n),
 the matrix A has n rows and 2^n -1 columns.
 
 The output of compA(n) induces a natural numbering (or order) of all subsets 
-of \mathcal{N}. We number 
+of \mathcal{N}. We number subsets by their column number. In the above,
+subset no. 1 is { 1 }, subset no. 2 is { 2 }, subset no. 3 is { 1, 2 }, while 
+subset no. 7 is { 1, 2, 3 }. We will use this ordering throughout.
+
+The function CompPart(n) computes all partitions of the set \mathcal{N} and stores
+the result in a cell array. For example, list=CompPart(3) produces an array list
+with
+
+list{1} =
+     1     0
+     1     0
+     0     1
+
+list{2} =
+     1     0     0
+     0     1     0
+     0     0     1
+
+list{3} =
+     1
+     1
+     1
+
+list{4} =
+     1     0
+     0     1
+     1     0
+
+list{5} =
+     1     0
+     0     1
+     0     1
+
+Note that CompPart(13) produces already a list with 27,644,437 entries, see
+https://oeis.org/A000110. MATLAB stores this in a cell array with 19,853,529,488 bytes.
+
+Note that CompPart does not sort the partitions into their natural partial order.
+Nevertheless, we will use the order induced by the output of CompPart throughout.
+For example, the partition described by
+
+     1     0
+     0     1
+     1     0
+
+will be denoted as the fourth partition, as it is stored as list{4}.
+
+A game with free riders (externalities) is now defined by a payoff or value
+function v that provides a payoff value v(S; P) for each partition P of
+\mathcal{N} and each set S \in P. We store these values in a cell array
+'payoff'.  payoff{i} is a vector of payoff values related to partition no. I.
+Let P be partition no. i and let values=payoff{i}. The partition P is
+represented as a matrix, with each column representing one set of P. 
+For columns 1, \ldots, m of this matrix, let S_1, \ldots, m be the
+corresponding subsets. We then have values[j] = v(S_j, P).
+In particular, if P has m subsets, then values is a vector of length m.
+
+Other data needed:
+
+zmax: can be computed by compzmax.m
+
+vi_max: cell array with the following meaning. vi_max{j} contains data related 
+to partition P=partition{j}. In particular,  vi_max{j} is a vector of length n, 
+with vi_max_Q(i) the largest right-hand side
+% showing up in the imputation constraints x_i \geq v( \{ i \} ; .... )
+
+
+% Author: Joerg Fliege
+% Date: 01/11/2024
+% Version: 1.0
+% (c) Nucleolus Software Ltd

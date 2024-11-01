@@ -83,8 +83,20 @@ For columns 1, \ldots, m of this matrix, let S_1, \ldots, m be the
 corresponding subsets. We then have values[j] = v(S_j, P).
 In particular, if P has m subsets, then values is a vector of length m.
 
+Other data needed:
+
+zmax: can be computed by compzmax.m. zmax is a matrix with n rows and 
+2^n-1 entries. Column no. i of zmax corresponds to subset i of { 1, \ldots, n }, 
+as stored in the output of comp(n). If T is subset no. i, then 
+zmax(k, i) = z_k^{max} (T), the latter as defined in Subsection 2.2.1.
+
+vi_max: cell array with the following meaning. vi_max{j} contains data related 
+to partition P=partition{j}. In particular,  vi_max{j} is a vector of length n, 
+with vi_max{j}[i] the largest right-hand side showing up in the imputation 
+constraints x_i \geq v( \{ i \} ; .... ) of I(P).
+
 
 % Author: Joerg Fliege
-% Date: 30/10/2024
+% Date: 01/11/2024
 % Version: 1.0
 % (c) Nucleolus Software Ltd

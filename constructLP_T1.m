@@ -1,4 +1,4 @@
-function [c, A1, A2, b1, b2] = constructLP(P, x, zmax, Q, T, valQ)
+function [c, A1, A2, b1, b2] = constructLP_T1(P, x, zmax, Q, T, valQ)
 % constructLP:
 % constructs the LP from Theorem 1 (p. 9) for a given pair (P, x) and a
 % partition Q and a set T with T \in Q.
@@ -18,7 +18,7 @@ function [c, A1, A2, b1, b2] = constructLP(P, x, zmax, Q, T, valQ)
 %
 % T: a subset of {1, \ldots, n} that shows up in Q (i.e. a column of Q).
 %
-% valQ: column vector of values v(S, Q) for all subsets S of Q. Values are
+% valQ: row vector of values v(S, Q) for all subsets S of Q. Values are
 % stored in the same order as subsets S are stored in the matrix Q.
 
 % We write the decision vector of the LP as z := [y; w] with y, w as in 
@@ -31,7 +31,7 @@ function [c, A1, A2, b1, b2] = constructLP(P, x, zmax, Q, T, valQ)
 %      A2*z <= b2.
 
 % Author: Joerg Fliege
-% Date: 29/10/2024
+% Date: 31/10/2024
 % Version: 1.0
 % (c) Nucleolus Software Ltd
 
@@ -57,7 +57,8 @@ for i=1:2^n-1
     end % if
 end % for
 
-b1 = [ b1; notT .* zmax(indexT) ];
+
+b1 = [ b1; notT .* zmax(:,indexT) ];
 % This is obviously not efficient, as many of these equations just say 0=0.
 
 % Third step, encode -y_i \leq -x_i for all i \in T:

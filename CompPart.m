@@ -7,28 +7,28 @@ function list = CompPart(n)
     % number of elements in the partition. Each column corresponds to one
     % subset of the partition. Each column is a 0/1 vector of length n, where
     % a 1 in row k indicates membership of element k in the set.
-    
+
     % Author: Joerg Fliege
     % Date: 30/10/2024
     % Version: 1.0
     % (c) Nucleolus Software Ltd
-    
+
     % tic; list = CompPart(12); toc
     % Elapsed time is 18.074701 seconds.
     % tic; list = CompPart(13); toc % Starts swapping to disk.
     % Elapsed time is 276.479086 seconds.
 
     % Declare output list
-    list = cell(Bell(n),1);    
-    
-    if n==2 
+    list = cell(lookupBell(n),1);
+
+    if n==2
        list{1} = [1; 1];
        list{2} = [1 0 ; 0 1];
     else
         list1 = CompPart(n-1);
         B = length(list1);
         for i=1:B
-            % Add the column vector (0, ..., 0, 1)' as the rightmost column 
+            % Add the column vector (0, ..., 0, 1)' as the rightmost column
             % to P. In other words, add the set \{ n \} to P.
             list{i} = [list1{i}, zeros(size(list1{i}, 1),1); zeros(1, size(list1{i}, 2)), 1];
         end % for i

@@ -1,4 +1,4 @@
-function [c, A1, A2, b1, b2] = constructLP_T1(P, x, zmax, Q, T, valQ)
+function [c, Aeq, A2, beq, b2] = constructLP_T1(P, x, zmax, Q, T, valQ, vi_max_Q)
 % constructLP:
 % constructs the LP from Theorem 1 (p. 9) for a given pair (P, x) and a
 % partition Q and a set T with T \in Q.
@@ -20,18 +20,21 @@ function [c, A1, A2, b1, b2] = constructLP_T1(P, x, zmax, Q, T, valQ)
 %
 % valQ: row vector of values v(S, Q) for all subsets S of Q. Values are
 % stored in the same order as subsets S are stored in the matrix Q.
+%
+% vi_max_Q: vector of length n, with vi_max_Q(i) the largest right-hand side
+% showing up in the imputation constraints x_i \geq v( \{ i \} ; .... )
 
 % We write the decision vector of the LP as z := [y; w] with y, w as in 
 % Theorem 1.
 %
 % Output:
-% Vectors c, b1, b2 and matrices A1, A2, by which we write the LP as
+% Vectors c, b1, b2 and matrices Aeq, Aeq, by which we write the LP as
 % min c' * z 
-% s.t. A1*z =  b1, 
+% s.t. Aeq*z =  beq, 
 %      A2*z <= b2.
 
 % Author: Joerg Fliege
-% Date: 31/10/2024
+% Date: 01/11/2024
 % Version: 1.0
 % (c) Nucleolus Software Ltd
 
@@ -42,33 +45,50 @@ c = zeros(1, n+1);
 c(n+1) = -1;
 
 % First step, encode $y \in I(Q)$:
-[A1, A2, b1, b2] = construct_imputations(Q, valQ);
+[Aeq, A2, beq, b2] = construct_imputations(Q, valQ, vi_max_Q);
 [n2_old, m2_old] = size(A2); % store these values for later
 
-% Second step, encode $y step_k = z_k^{max} (T)$ for k \notin T:
+% Second step, encode $y_k = z_k^{max} (T)$ for k \notin T:
 notT = ones(n, 1) - T;
-
-A1 = [ A1; diag(notT)];
+Aeq = [ Aeq; diag(notT)];
 
 allsets = compA(n);
 for i=1:2^n-1
     if T==allsets(:,i)
         indexT=i;
     end % if
-end % for
-
-
-b1 = [ b1; notT .* zmax(:,indexT) ];
+end % for i
+ 
+%z = zmax(:,indexT);
+%for i=1:length(z)
+%    if (z(i)>-Inf)
+%        z(i) = notT(i) * z(i);
+%    else % z(i)=-Inf
+%        if notT(i)==0
+%           z(i) = 0;
+%        else   
+%           % z(i)=z(i);
+%        end
+%    end % if z(i)>-Inf
+%    % This is a hack for managing situations with z(i)=Inf, as then
+%    % notT(i) * z(i) = NaN if notT(i)==0.
+%end % for i
+%beq = [ beq; z ];
 % This is obviously not efficient, as many of these equations just say 0=0.
 
+beq = [ beq; notT .* zmax(:,indexT) ];
+% This works only if zmax does not contain entries Inf or -Inf, as
+% multiplication with 0 will result in NaN.
+
 % Third step, encode -y_i \leq -x_i for all i \in T:
+% (We add +w on the left-hand side in the final step.)
 A2 = [ A2; -diag(T)];
 b2 = [b2; T .* (-x)];
 
 % Finally, extend A1 and A2 by one column so that we can build the 
 % products A1*[y;w] and A2*[y; w]:
-[n1 m1] = size(A1);
-A1 = [A1, zeros(n1, 1) ];
-A2 = [A2, [ zeros(n2_old, 1); ones(n, 1) ] ];
+[n1 m1] = size(Aeq);
+Aeq = [Aeq, zeros(n1, 1) ];
+A2 = [A2, [ zeros(n2_old, 1); T .* ones(n, 1) ] ];
 
 end % function
